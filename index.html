@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muhammad Raditya Duta Pratama | Portofolio</title>
+  <meta name="description" content="Portofolio Muhammad Raditya Duta Pratama - Web developer & Game developer" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            head: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"DM Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-padding-top: 4rem; }
+    body { font-family: 'DM Sans', sans-serif; background: #fff; color: #000; overflow-x: hidden; }
+    .font-head { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
+
+    /* ---------- NAVBAR (style dasar, tidak bergantung Tailwind) ---------- */
+    #topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 4rem;
+      background: #fff; color: #000; border-bottom: 1px solid rgba(0,0,0,.1);
+      transition: background-color .5s, color .5s; }
+    #topbar nav { height: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; }
+    #topbar .brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: -0.03em; color: inherit; text-decoration: none; }
+    #topbar ul { display: none; }
+    #burger { width: 2.25rem; height: 2.25rem; display: grid; place-content: center; gap: 6px; background: none; border: 0; color: inherit; }
+    #burger span { display: block; width: 1.5rem; height: 2px; background: currentColor; }
+    @media (min-width: 768px) {
+      #topbar nav { padding: 0 2rem; }
+      #topbar ul { display: flex; align-items: center; gap: 2rem; font-size: 13px; list-style: none; }
+      #burger { display: none; }
+    }
+    .nav-link { position: relative; padding-bottom: 3px; color: inherit; text-decoration: none; }
+    .nav-link::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .35s; }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    /* ---------- Cursor & mesh ---------- */
+    #mesh { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; mix-blend-mode: difference; }
+    #cursor-ring, #cursor-dot {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 70;
+      mix-blend-mode: difference; background: transparent; will-change: transform;
+    }
+    #cursor-ring { width: 34px; height: 34px; border: 1.5px solid #fff; border-radius: 50%; transition: width .25s, height .25s, background .25s; }
+    #cursor-ring.hover { width: 64px; height: 64px; background: #fff; }
+    #cursor-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+    @media (hover: none), (pointer: coarse) {
+      #cursor-ring, #cursor-dot { display: none; }
+    }
+    @media (hover: hover) and (pointer: fine) {
+      body, a, button { cursor: none; }
+    }
+
+    /* ---------- Progress bar ---------- */
+    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: left; transform: scaleX(0); background: #fff; z-index: 80; mix-blend-mode: difference; }
+
+    /* ---------- Reveal ---------- */
+    .rv { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+    .rv.in { opacity: 1; transform: none; }
+    .rv-left { opacity: 0; transform: translateX(-60px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+    .rv-right { opacity: 0; transform: translateX(60px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+    .rv-left.in, .rv-right.in { opacity: 1; transform: none; }
+
+    /* ---------- Home ---------- */
+    .h-left  { opacity: 0; transform: translateX(-140px); transition: opacity 1.1s cubic-bezier(.2,.8,.2,1) .2s, transform 1.1s cubic-bezier(.2,.8,.2,1) .2s; }
+    .h-right { opacity: 0; transform: translateX(140px);  transition: opacity 1.1s cubic-bezier(.2,.8,.2,1) .2s, transform 1.1s cubic-bezier(.2,.8,.2,1) .2s; }
+    .h-up    { opacity: 0; transform: translateY(40px);   transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+    .go .h-left, .go .h-right { opacity: 1; transform: none; }
+    .go .h-up { opacity: 1; transform: none; }
+    .go .h-up.d1 { transition-delay: 1.0s; }
+    .go .h-up.d2 { transition-delay: 1.2s; }
+    .go .h-up.d3 { transition-delay: 1.4s; }
+
+    .spider-sway { animation: sway 4.5s ease-in-out infinite; transform-origin: top center; }
+    @keyframes sway { 0%,100% { transform: translateX(-14px) rotate(-2.5deg); } 50% { transform: translateX(14px) rotate(2.5deg); } }
+
+    .watermark { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 0; pointer-events: none; user-select: none; }
+    .watermark span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(4rem, 17vw, 17rem); line-height: .86; color: #f1f1f1; letter-spacing: -0.05em; white-space: nowrap; }
+    .watermark span:nth-child(2) { transform: translateX(8%); }
+
+    /* ---------- Buttons ---------- */
+    .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.4rem; border-radius: 999px; font-weight: 700; font-size: .85rem; border: 2px solid #000; text-decoration: none; transition: transform .3s, background .3s, color .3s; }
+    .btn:hover { transform: translateY(-3px); }
+    .btn-solid { background: #000; color: #fff; }
+    .btn-solid:hover { background: #fff; color: #000; }
+    .btn-line { background: #fff; color: #000; }
+    .btn-line:hover { background: #000; color: #fff; }
+
+    /* ---------- About ---------- */
+    .caret { display: inline-block; width: 8px; height: 1em; background: #fff; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .tk-c { color: #6b6b6b; } .tk-s { color: #e8e8e8; } .tk-k { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .tk-b { color: #fff; font-weight: 700; } .tk-p { color: #bdbdbd; }
+    .glass { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; backdrop-filter: blur(6px); }
+
+    /* ---------- Skills ---------- */
+    .chip { display: flex; align-items: center; gap: .6rem; padding: .55rem 1.1rem .55rem .6rem; border: 2px solid #000; border-radius: 14px; background: #fff; font-weight: 500; font-size: .9rem; will-change: transform; transition: background .3s, color .3s, box-shadow .3s; }
+    .chip:hover { background: #000; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,.25); }
+    .chip i { font-style: normal; font-size: .62rem; font-weight: 700; border: 2px solid currentColor; border-radius: 8px; padding: .25rem .4rem; min-width: 2rem; text-align: center; }
+    .filter-btn { background: #fff; padding: .4rem 1.1rem; border: 2px solid #000; border-radius: 999px; font-size: .78rem; font-weight: 700; transition: background .3s, color .3s; }
+    .filter-btn.active, .filter-btn:hover { background: #000; color: #fff; }
+    .marquee-row { display: flex; width: max-content; will-change: transform; }
+    .marquee-row span { display: inline-flex; align-items: center; gap: 1.5rem; padding-right: 1.5rem; font-weight: 500; font-size: .9rem; white-space: nowrap; }
+    .marquee-row span b { font-size: .6rem; opacity: .5; }
+    .grp { margin-bottom: 1.6rem; transition: opacity .35s ease, transform .35s ease; }
+    .grp.off { opacity: 0; transform: translateY(10px); }
+    .grp-label { font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; margin-bottom: .7rem; }
+
+    /* ---------- Projects ---------- */
+    .p-card { position: relative; border: 1px solid rgba(255,255,255,.16); border-radius: 22px; background: rgba(255,255,255,.03); padding: 1.6rem; overflow: hidden; transition: transform .45s cubic-bezier(.2,.7,.2,1), border-color .4s, background .4s; transform-style: preserve-3d; }
+    .p-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.13), transparent 60%); opacity: 0; transition: opacity .4s; pointer-events: none; }
+    .p-card:hover { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.06); }
+    .p-card:hover::before { opacity: 1; }
+    .tag { display: inline-block; padding: .15rem .8rem; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; font-size: .68rem; font-weight: 500; }
+    .p-list li { position: relative; padding-left: 1.1rem; }
+    .p-list li::before { content: ''; position: absolute; left: 0; top: .72em; width: 7px; height: 1px; background: #fff; }
+
+    /* ---------- Contact ---------- */
+    .c-card { position: relative; display: block; overflow: hidden; border: 2px solid #000; border-radius: 22px; padding: 1.4rem; background: #fff; color: #000; text-decoration: none; transition: transform .4s cubic-bezier(.2,.7,.2,1), background .35s, color .35s; }
+    .c-card:hover { background: #000; color: #fff; transform: translateY(-8px); }
+    .c-card .ghost { position: absolute; right: -.3rem; bottom: -1.2rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 6.5rem; line-height: 1; color: #f0f0f0; transition: color .35s, transform .5s; pointer-events: none; }
+    .c-card:hover .ghost { color: #1c1c1c; transform: translateX(-10px); }
+    .c-card .arrow { transition: transform .4s; }
+    .c-card:hover .arrow { transform: translate(4px, -4px) rotate(8deg); }
+    .c-icon { width: 48px; height: 48px; border: 2px solid currentColor; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .8rem; }
+
+    /* gambar laba-laba kontak: di HP tampil normal di atas kartu */
+    #spiderContact { transition: transform 1.8s cubic-bezier(.22,1.15,.36,1); }
+    @media (max-width: 767px) {
+      #spiderContact { position: relative !important; top: auto !important; right: auto !important;
+        width: 70vw; max-width: 280px; margin: 0 auto 1.5rem; transform: none !important; transition: none; }
+    }
+
+    /* ---------- Transisi layar (navbar) ---------- */
+    .trans { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; transform: translateY(100%); pointer-events: none; }
+    .trans.dark  { background: #000; color: #fff; box-shadow: 0 -2px 0 #fff; }
+    .trans.light { background: #fff; color: #000; box-shadow: 0 -2px 0 #000; }
+    .trans.enter { transform: none; pointer-events: auto; transition: transform .65s cubic-bezier(.76,0,.24,1); }
+    .trans.leave { transform: translateY(-100%); pointer-events: auto; transition: transform .65s cubic-bezier(.76,0,.24,1); }
+    .trans .t-label { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.04em; font-size: clamp(3.2rem, 14vw, 9rem); line-height: 1; opacity: 0; transform: translateY(40px); }
+    .trans.enter .t-label, .trans.leave .t-label { opacity: 1; transform: none; transition: opacity .5s ease .3s, transform .6s cubic-bezier(.2,.8,.2,1) .3s; }
+    .trans .t-bar { display: block; width: min(220px, 50vw); height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; }
+    .trans.enter .t-bar, .trans.leave .t-bar { transform: scaleX(1); transition: transform .7s cubic-bezier(.7,0,.2,1) .35s; }
+
+    .missing-img { display: grid; place-items: center; text-align: center; border: 2px dashed #999; border-radius: 14px; color: #777; font-size: .7rem; padding: 1rem; min-height: 120px; }
+
+    /* ---------- Mobile menu ---------- */
+    #mobileMenu { position: fixed; inset: 0; z-index: 45; background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.75rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 2.25rem; opacity: 0; pointer-events: none; transition: opacity .5s; }
+    .m-link { color: inherit; text-decoration: none; }
+    @media (min-width: 768px) { #mobileMenu { display: none; } }
+
+    /* ---------- Mobile: skill tampil penuh, tidak acak ---------- */
+    @media (max-width: 767px) {
+      #webImg { display: none; }
+      #chips { min-height: 0 !important; }
+      .chip { opacity: 1 !important; transform: none !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      .rv, .rv-left, .rv-right, .h-left, .h-right, .h-up { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress"></div>
+  <canvas id="mesh"></canvas>
+  <div id="cursor-ring"></div>
+  <div id="cursor-dot"></div>
+  <div id="trans" class="trans" aria-hidden="true"><span id="transLabel" class="t-label">about</span><span class="t-bar"></span></div>
+
+  <!-- ================= NAVBAR ================= -->
+  <header id="topbar">
+    <nav>
+      <a href="#home" class="brand">portofoliosaya</a>
+      <ul>
+        <li><a class="nav-link" href="#about">about</a></li>
+        <li><a class="nav-link" href="#skills">skills</a></li>
+        <li><a class="nav-link" href="#projects">projects</a></li>
+        <li><a class="nav-link" href="#contact">contact</a></li>
+      </ul>
+      <button id="burger" aria-label="Menu">
+        <span id="b1"></span>
+        <span id="b2"></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu">
+    <a href="#about" class="m-link">about</a>
+    <a href="#skills" class="m-link">skills</a>
+    <a href="#projects" class="m-link">projects</a>
+    <a href="#contact" class="m-link">contact</a>
+  </div>
+
+  <main>
+    <!-- ================= HOME ================= -->
+    <section id="home" class="relative min-h-screen bg-white overflow-hidden flex items-center pt-20 pb-10" data-theme="light">
+      <div class="watermark" aria-hidden="true"><span>MUHAMMAD</span><span>RADITYA</span></div>
+
+      <div class="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8">
+        <div class="grid md:grid-cols-[1fr_auto_1fr] items-center gap-6 md:gap-10">
+
+          <!-- kiri -->
+          <div class="h-left order-2 md:order-1 text-center md:text-right">
+            <h1 class="font-head font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.02]">Web developer</h1>
+            <p class="mt-3 text-sm sm:text-[15px] text-neutral-600 max-w-xs mx-auto md:mx-0 md:ml-auto">Membangun antarmuka yang bersih, cepat, dan nyaman dipakai di semua perangkat.</p>
+          </div>
+
+          <!-- tengah: gambar spiderman -->
+          <div class="order-1 md:order-2 flex justify-center self-start md:self-center -mt-6 md:-mt-0 overflow-visible">
+            <div>
+              <div class="spider-sway">
+                <img src="spidurman-removebg-preview.png" alt="Spiderman menggantung" class="h-[34vh] sm:h-[42vh] md:h-[50vh] w-auto mix-blend-multiply select-none" draggable="false" />
+              </div>
+            </div>
+          </div>
+
+          <!-- kanan -->
+          <div class="h-right order-3 text-center md:text-left">
+            <h1 class="font-head font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.02]">Game<br class="hidden md:block" /> developer</h1>
+            <p class="mt-3 text-sm sm:text-[15px] text-neutral-600 max-w-xs mx-auto md:mx-0">Dari web app sampai game sederhana, saya suka mengubah ide menjadi sesuatu yang bisa dimainkan.</p>
+          </div>
+        </div>
+
+        <!-- bawah -->
+        <div class="mt-8 md:mt-4 text-center">
+          <h2 class="h-up d1 font-head font-bold text-xl sm:text-2xl">Muhammad Raditya Duta Pratama</h2>
+          <p class="h-up d2 text-xs text-neutral-500 mt-1">Siswa PPLG, SMK TI Dwi Guna</p>
+          <div class="h-up d3 mt-5 flex flex-wrap justify-center gap-3">
+            <a href="https://github.com/MradityaaD" target="_blank" rel="noopener" class="btn btn-solid">Lihat GitHub</a>
+            <a href="cv-Mradit.jpeg" download class="btn btn-line">Download CV</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" class="relative bg-black text-white py-24 md:py-32" data-theme="dark">
+      <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <h2 class="rv font-head font-bold text-5xl sm:text-6xl">About me</h2>
+
+        <div class="mt-10 grid lg:grid-cols-2 gap-6">
+          <!-- jendela kode diketik -->
+          <div class="glass rv-left overflow-hidden">
+            <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10">
+              <span class="w-3 h-3 rounded-full bg-white"></span>
+              <span class="w-3 h-3 rounded-full bg-white/50"></span>
+              <span class="w-3 h-3 rounded-full bg-white/25"></span>
+              <span class="ml-3 text-xs text-white/60 font-mono">about.js</span>
+            </div>
+            <pre id="codeBox" class="font-mono text-[11.5px] sm:text-[13px] leading-6 p-4 sm:p-6 min-h-[320px] overflow-x-auto whitespace-pre"></pre>
+          </div>
+
+          <!-- teks -->
+          <div class="glass rv-right p-6 sm:p-8 space-y-4 text-[14px] sm:text-[15px] leading-relaxed text-white/85">
+            <p>Siswa aktif SMK TI Dwi Guna jurusan PPLG (Pengembangan Perangkat Lunak dan Gim) yang disiplin, memiliki motivasi belajar tinggi, serta siap mengikuti program PKL untuk menambah pengalaman di dunia kerja. Memiliki pemahaman dasar pemrograman, pengoperasian komputer, problem solving, dan mampu bekerja sama dalam tim.</p>
+            <p>Menguasai dasar HTML, CSS, dan logika pemrograman untuk pembuatan website. Mampu merancang alur tampilan (wireframe) dan UI menggunakan Figma dan Canva.</p>
+            <p>Terbiasa menggunakan VS Code untuk penulisan kode dan MS Office untuk dokumentasi. Adaptif, berkemauan belajar tinggi, disiplin, dan mampu bekerja sama dalam tim.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section id="skills" class="relative bg-white pt-24 md:pt-32 overflow-hidden" data-theme="light">
+      <div class="relative max-w-6xl mx-auto px-5 sm:px-8">
+        <img id="webImg" src="amazing.png" alt="Gambar Spiderman" class="absolute z-0 top-0 right-5 sm:right-8 w-[30vw] max-w-[200px] h-auto lg:max-w-[42%] lg:w-auto lg:h-[calc(100%-1.6rem)] object-contain object-right mix-blend-multiply pointer-events-none select-none" draggable="false" />
+
+        <h2 class="rv relative z-10 font-head font-bold text-5xl sm:text-6xl">Skills</h2>
+
+        <div id="filters" class="rv relative z-10 mt-8 flex flex-wrap gap-2">
+          <button class="filter-btn active" data-f="all">All</button>
+          <button class="filter-btn" data-f="frontend">Frontend</button>
+          <button class="filter-btn" data-f="backend">Backend</button>
+          <button class="filter-btn" data-f="tools">Tools</button>
+        </div>
+
+        <div id="chips" class="relative z-10 mt-10 min-h-[260px]"></div>
+      </div>
+
+      <!-- teks bergerak mengikuti scroll (1 baris) -->
+      <div class="relative z-10 mt-10 border-y-2 border-black py-3 overflow-hidden">
+        <div id="mq1" class="marquee-row"></div>
+      </div>
+      <div class="h-16"></div>
+    </section>
+
+    <!-- ================= PROJECTS ================= -->
+    <section id="projects" class="relative bg-black text-white py-24 md:py-32" data-theme="dark">
+      <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <h2 class="rv font-head font-bold text-5xl sm:text-6xl">Projects</h2>
+        <p class="rv mt-4 text-sm text-white/70 max-w-md" style="transition-delay:.1s">Web app dan game yang pernah saya bangun.</p>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-5 items-stretch">
+          <div class="rv" style="transition-delay:.05s">
+            <article class="p-card h-full flex flex-col md:min-h-[540px]">
+              <div class="flex items-center justify-between"><span class="tag">Web</span><span class="font-mono text-xs text-white/40">01</span></div>
+              <h3 class="font-head font-bold text-2xl mt-8">Website Sederhana</h3>
+              <p class="mt-4 text-[13.5px] leading-relaxed text-white/70">Membuat tampilan website statis sederhana dengan HTML dan CSS, dengan tata letak yang rapi dan responsif. Proyek ini melatih saya menyusun halaman dari nol, mulai dari kerangka HTML sampai pengaturan gaya dan jarak antar elemen.</p>
+              <p class="mt-7 text-[11px] font-bold tracking-[.14em] uppercase text-white/45">Yang dikerjakan</p>
+              <ul class="p-list mt-3 space-y-2.5 text-[13px] leading-relaxed text-white/80">
+                <li>Menyusun struktur halaman dengan HTML</li>
+                <li>Mengatur tata letak memakai CSS (Flexbox dan Grid)</li>
+                <li>Membuat tampilan menyesuaikan layar HP sampai desktop</li>
+                <li>Merapikan warna, font, dan jarak antar elemen</li>
+              </ul>
+              <div class="mt-auto pt-8 flex flex-wrap gap-2"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Responsif</span></div>
+            </article>
+          </div>
+          <div class="rv" style="transition-delay:.2s">
+            <article class="p-card h-full flex flex-col md:min-h-[540px]">
+              <div class="flex items-center justify-between"><span class="tag">Desain</span><span class="font-mono text-xs text-white/40">02</span></div>
+              <h3 class="font-head font-bold text-2xl mt-8">Desain Antarmuka Aplikasi</h3>
+              <p class="mt-4 text-[13.5px] leading-relaxed text-white/70">Merancang alur dan tampilan antarmuka (wireframe/prototype) aplikasi menggunakan Figma, lengkap dengan warna, tombol, dan tata letak. Fokusnya membuat aplikasi mudah dipahami sebelum kodenya ditulis.</p>
+              <p class="mt-7 text-[11px] font-bold tracking-[.14em] uppercase text-white/45">Yang dikerjakan</p>
+              <ul class="p-list mt-3 space-y-2.5 text-[13px] leading-relaxed text-white/80">
+                <li>Membuat wireframe alur antar halaman</li>
+                <li>Memilih warna dan gaya tombol</li>
+                <li>Menyusun tata letak yang konsisten</li>
+                <li>Menghubungkan layar menjadi prototype</li>
+              </ul>
+              <div class="mt-auto pt-8 flex flex-wrap gap-2"><span class="tag">Figma</span><span class="tag">Wireframe</span><span class="tag">Prototype</span></div>
+            </article>
+          </div>
+          <div class="rv" style="transition-delay:.35s">
+            <article class="p-card h-full flex flex-col md:min-h-[540px]">
+              <div class="flex items-center justify-between"><span class="tag">Game</span><span class="font-mono text-xs text-white/40">03</span></div>
+              <h3 class="font-head font-bold text-2xl mt-8">Game Flappy Bird 2D</h3>
+              <p class="mt-4 text-[13.5px] leading-relaxed text-white/70">Membuat game interaktif Flappy Bird dengan blok pemrograman Scratch, dari tampilan awal, rintangan, hingga game over. Proyek ini melatih logika pemrograman seperti perulangan, kondisi, dan variabel.</p>
+              <p class="mt-7 text-[11px] font-bold tracking-[.14em] uppercase text-white/45">Yang dikerjakan</p>
+              <ul class="p-list mt-3 space-y-2.5 text-[13px] leading-relaxed text-white/80">
+                <li>Membuat tampilan awal sebelum game dimulai</li>
+                <li>Mengatur gerak burung dan rintangan dengan blok kode</li>
+                <li>Mendeteksi tabrakan untuk memicu game over</li>
+                <li>Menerapkan perulangan, kondisi, dan variabel</li>
+              </ul>
+              <div class="mt-auto pt-8 flex flex-wrap gap-2"><span class="tag">Scratch</span><span class="tag">Logika</span><span class="tag">Game 2D</span></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" class="relative bg-white py-24 md:py-32 overflow-hidden" data-theme="light">
+      <!-- gambar laba-laba -->
+      <div id="spiderContact" class="absolute top-0 right-0 w-[62vw] sm:w-[36vw] max-w-[430px] pointer-events-none z-0" style="transform:translateY(-110%)">
+        <img src="spider2-removebg-preview.png" alt="Laba-laba menggantung" class="w-full h-auto mix-blend-multiply select-none" draggable="false" />
+      </div>
+
+      <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8">
+        <h2 class="rv font-head font-bold text-5xl sm:text-6xl">Contact</h2>
+        <p class="rv mt-4 text-sm text-neutral-600" style="transition-delay:.1s">Punya ide atau tawaran kolaborasi? Hubungi saya lewat salah satu cara ini.</p>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-5 items-stretch">
+          <div class="rv" style="transition-delay:.05s">
+            <a href="https://wa.me/6285774484144" target="_blank" rel="noopener" class="c-card h-full">
+              <div class="flex justify-between items-start"><div class="c-icon">WA</div><span class="arrow text-xl">↗</span></div>
+              <h3 class="font-head font-bold text-xl mt-6">WhatsApp</h3>
+              <p class="text-[11px] opacity-70 mt-1">Chat langsung</p>
+              <p class="text-[12px] mt-1 relative z-10 break-all">+6285774484144</p>
+              <span class="ghost" aria-hidden="true">WA</span>
+            </a>
+          </div>
+          <div class="rv" style="transition-delay:.2s">
+            <a id="gmailLink" href="https://mail.google.com/mail/?view=cm&fs=1&to=pratamaradityaa98@gmail.com&su=Halo%20Raditya&body=Halo%20Raditya%2C%20saya%20melihat%20portofoliomu.%20" target="_blank" rel="noopener" class="c-card h-full">
+              <div class="flex justify-between items-start"><div class="c-icon">@</div><span class="arrow text-xl">↗</span></div>
+              <h3 class="font-head font-bold text-xl mt-6">Gmail</h3>
+              <p class="text-[11px] opacity-70 mt-1">Kirim email langsung</p>
+              <p class="text-[12px] mt-1 relative z-10 break-all">pratamaradityaa98@gmail.com</p>
+              <span class="ghost" aria-hidden="true">@</span>
+            </a>
+          </div>
+          <div class="rv" style="transition-delay:.35s">
+            <a href="https://github.com/MradityaaD" target="_blank" rel="noopener" class="c-card h-full">
+              <div class="flex justify-between items-start"><div class="c-icon">GH</div><span class="arrow text-xl">↗</span></div>
+              <h3 class="font-head font-bold text-xl mt-6">GitHub</h3>
+              <p class="text-[11px] opacity-70 mt-1">Lihat kode saya</p>
+              <p class="text-[12px] mt-1 relative z-10 break-all">github.com/Mradityaa0</p>
+              <span class="ghost" aria-hidden="true">GH</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (() => {
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+    const touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = () => innerWidth < 768;
+
+    /* ---------- Gambar tidak ditemukan -> kotak petunjuk ---------- */
+    $$('img').forEach(img => {
+      img.addEventListener('error', () => {
+        const box = document.createElement('div');
+        box.className = 'missing-img';
+        box.style.width = img.className.includes('h-[') ? '180px' : '100%';
+        box.textContent = 'Taruh gambar di: ' + img.getAttribute('src');
+        img.replaceWith(box);
+      });
+    });
+
+    /* ---------- Intro Home ---------- */
+    window.addEventListener('load', () => {
+      setTimeout(() => $('#home').classList.add('go'), 150);
+    });
+
+    /* ---------- Scroll reveal ---------- */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    $$('.rv, .rv-left, .rv-right').forEach(el => io.observe(el));
+
+    /* laba-laba contact turun saat terlihat (hanya desktop) */
+    const sc = $('#spiderContact');
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !isMobile()) sc.style.transform = 'translateY(0)';
+    }, { threshold: 0.25 }).observe($('#contact'));
+
+    /* ---------- Menu mobile ---------- */
+    const burger = $('#burger'), mm = $('#mobileMenu');
+    let open = false;
+    const toggleMenu = (state) => {
+      open = state ?? !open;
+      mm.style.opacity = open ? '1' : '0';
+      mm.style.pointerEvents = open ? 'auto' : 'none';
+      $('#b1').style.transform = open ? 'translateY(4px) rotate(45deg)' : '';
+      $('#b2').style.transform = open ? 'translateY(-4px) rotate(-45deg)' : '';
+      document.body.style.overflow = open ? 'hidden' : '';
+      navTheme();
+    };
+    burger.addEventListener('click', () => toggleMenu());
+    $$('.m-link').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+    /* ---------- Scroll spy & tema navbar ---------- */
+    const sections = ['about', 'skills', 'projects', 'contact'].map(id => $('#' + id));
+    const links = $$('.nav-link');
+    const topbar = $('#topbar');
+    const allSecs = [$('#home'), ...sections];
+    function navTheme() {
+      let cur = allSecs[0];
+      allSecs.forEach(sec => { if (scrollY + 32 >= sec.offsetTop) cur = sec; });
+      const dark = cur.dataset.theme === 'dark' || open;
+      topbar.style.background = dark ? '#000' : '#fff';
+      topbar.style.color = dark ? '#fff' : '#000';
+      topbar.style.borderBottomColor = dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)';
+    }
+    function spy() {
+      navTheme();
+      const y = scrollY + innerHeight * 0.4;
+      let cur = null;
+      sections.forEach(s => { if (y >= s.offsetTop) cur = s.id; });
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+    }
+
+    /* ---------- Transisi layar saat klik navbar ---------- */
+    const trans = $('#trans'), tLabel = $('#transLabel');
+    let busy = false;
+    function goTo(id) {
+      const target = id === 'home' ? $('#home') : $('#' + id);
+      if (!target || busy) return;
+      busy = true;
+      const dark = target.dataset.theme === 'dark';
+      tLabel.textContent = id;
+      trans.className = 'trans ' + (dark ? 'dark' : 'light');
+      void trans.offsetWidth;
+      trans.classList.add('enter');
+      setTimeout(() => {
+        scrollTo({ top: id === 'home' ? 0 : target.offsetTop, behavior: 'instant' });
+        onScroll();
+      }, 720);
+      setTimeout(() => { trans.classList.remove('enter'); trans.classList.add('leave'); }, 1350);
+      setTimeout(() => { trans.className = 'trans'; busy = false; }, 2050);
+    }
+    $$('header a[href^="#"], .m-link, #mobileMenu a').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      goTo(a.getAttribute('href').slice(1));
+    }));
+
+    /* ---------- Gmail: di HP buka aplikasi Gmail, di komputer buka Gmail web ---------- */
+    const gm = $('#gmailLink');
+    if (gm && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      gm.href = 'mailto:pratamaradityaa98@gmail.com?subject=Halo%20Raditya';
+      gm.removeAttribute('target');
+    }
+
+    /* ---------- About: kode diketik ---------- */
+    const code = `// siapa saya, dalam kode
+const siswa = {
+  nama: "Muhammad Raditya Duta Pratama",
+  sekolah: "SMK TI Dwi Guna",
+  jurusan: "PPLG",
+  tools: ["VS Code", "Figma", "Canva"],
+  siapPKL: true,
+};
+
+function belajar(topik) {
+  return topik.praktik().ulangi();
+}`;
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const hl = s => esc(s).replace(
+      /(\/\/.*)|("[^"\n]*"?)|\b(const|function|return)\b|\b(true|false)\b|(\b\w+)(?=:)|(\b\w+)(?=\()/g,
+      (m, c, str, kw, bool, prop, fn) =>
+        c ? `<span class="tk-c">${m}</span>` :
+        str ? `<span class="tk-s">${m}</span>` :
+        kw ? `<span class="tk-k">${m}</span>` :
+        bool ? `<span class="tk-b">${m}</span>` :
+        prop ? `<span class="tk-p">${m}</span>` :
+        fn ? `<span class="tk-b">${m}</span>` : m
+    );
+    const codeBox = $('#codeBox');
+    let typed = false;
+    function typeCode() {
+      if (typed) return; typed = true;
+      if (reduce) { codeBox.innerHTML = hl(code); return; }
+      let i = 0;
+      (function step() {
+        i = Math.min(i + 3, code.length);
+        codeBox.innerHTML = hl(code.slice(0, i)) + '<span class="caret"></span>';
+        if (i < code.length) {
+          const ch = code[i - 1];
+          setTimeout(step, ch === '\n' ? 70 : 14);
+        }
+      })();
+    }
+    codeBox.innerHTML = '<span class="caret"></span>';
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) setTimeout(typeCode, 250); }, { threshold: 0.4 }).observe(codeBox);
+
+    /* ---------- Skills ---------- */
+    const skills = [
+      ['HS', 'HTML5', 'frontend'], ['C3', 'CSS3', 'frontend'], ['JS', 'JavaScript', 'frontend'],
+      ['PHP', 'PHP', 'backend'], ['SQL', 'MySQL', 'backend'], ['Py', 'Python', 'backend'],
+      ['GH', 'GitHub', 'tools'], ['VS', 'VS Code', 'tools'], ['Ca', 'Canva', 'tools'], ['Fi', 'Figma', 'tools'],
+    ];
+    const catName = { frontend: 'Front End', backend: 'Back End', tools: 'Tools' };
+    const chipsEl = $('#chips');
+    const groups = {};
+    Object.keys(catName).forEach(cat => {
+      const g = document.createElement('div');
+      g.className = 'grp';
+      g.innerHTML = '<p class="grp-label">' + catName[cat] + '</p><div class="flex flex-wrap gap-3"></div>';
+      chipsEl.appendChild(g);
+      groups[cat] = g;
+    });
+    const spreadX = Math.min(innerWidth, 1000) * 0.9;
+    const chips = skills.map(([ic, name, cat], i) => {
+      const el = document.createElement('div');
+      el.className = 'chip';
+      el.innerHTML = '<i>' + ic + '</i>' + name;
+      groups[cat].lastChild.appendChild(el);
+      const scatter = !isMobile();
+      return {
+        el,
+        rx: scatter ? (Math.random() - 0.5) * spreadX : 0,
+        ry: scatter ? (Math.random() - 0.4) * 460 : 0,
+        rr: scatter ? (Math.random() - 0.5) * 50 : 0,
+        d: i * 0.025
+      };
+    });
+    let skillP = 0, skillTarget = 0;
+    const skillsSec = $('#skills');
+    function updateSkillTarget() {
+      if (isMobile()) { skillTarget = 1; return; }
+      const r = skillsSec.getBoundingClientRect();
+      const start = innerHeight * 0.85, end = -innerHeight * 0.05;
+      skillTarget = clamp((start - r.top) / (start - end), 0, 1);
+    }
+    function renderChips() {
+      skillP = lerp(skillP, skillTarget, 0.1);
+      chips.forEach(c => {
+        if (isMobile()) {
+          c.el.style.transform = '';
+          c.el.style.opacity = '1';
+          return;
+        }
+        const t = easeOut(clamp((skillP - c.d) / 0.7, 0, 1));
+        const k = 1 - t;
+        c.el.style.transform = 'translate3d(' + c.rx * k + 'px,' + c.ry * k + 'px,0) rotate(' + c.rr * k + 'deg)';
+        c.el.style.opacity = (0.3 + 0.7 * t).toFixed(3);
+      });
+    }
+    $$('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
+      $$('.filter-btn').forEach(x => x.classList.toggle('active', x === btn));
+      const f = btn.dataset.f;
+      Object.entries(groups).forEach(([cat, g]) => {
+        const show = f === 'all' || f === cat;
+        clearTimeout(g._t);
+        if (show) {
+          g.style.display = '';
+          requestAnimationFrame(() => requestAnimationFrame(() => g.classList.remove('off')));
+        } else {
+          g.classList.add('off');
+          g._t = setTimeout(() => { g.style.display = 'none'; }, 350);
+        }
+      });
+    }));
+
+    /* teks 1 baris, geraknya mengikuti scroll */
+    const mq = $('#mq1');
+    const unit = skills.map(sk => '<span>' + sk[1] + '<b>◆</b></span>').join('');
+    mq.innerHTML = unit + unit + unit + unit;
+    let mqCur = 0, mqBase = 0;
+    function tickMarquee() {
+      const w = mq.scrollWidth / 4;
+      mqCur = lerp(mqCur, -scrollY * 0.7, 0.1);
+      mqBase += 0.25;
+      let x = (mqCur - mqBase) % w;
+      if (x > 0) x -= w;
+      mq.style.transform = 'translate3d(' + x + 'px,0,0)';
+    }
+
+    /* ---------- Projects: spotlight + tilt (desktop saja) ---------- */
+    if (!touch) {
+      $$('.p-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+          card.style.setProperty('--mx', px * 100 + '%');
+          card.style.setProperty('--my', py * 100 + '%');
+          card.style.transform = `perspective(900px) rotateX(${(0.5 - py) * 6}deg) rotateY(${(px - 0.5) * 8}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      });
+    }
+
+    /* ---------- Progress + scroll ---------- */
+    const prog = $('#progress');
+    function onScroll() {
+      const h = document.documentElement.scrollHeight - innerHeight;
+      prog.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+      updateSkillTarget();
+      spy();
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    onScroll();
+
+    /* ---------- Cursor ---------- */
+    const ring = $('#cursor-ring'), dot = $('#cursor-dot');
+    const mouse = { x: -100, y: -100, rx: -100, ry: -100, on: false };
+    if (!touch) {
+      addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.on = true; });
+      document.addEventListener('mouseleave', () => { mouse.on = false; });
+      document.addEventListener('mouseover', e => {
+        ring.classList.toggle('hover', !!e.target.closest('a, button, .p-card, .chip'));
+      });
+    }
+
+    /* ---------- Mesh / jaring ---------- */
+    const cv = $('#mesh'), ctx = cv.getContext('2d');
+    let W, H, DPR, pts = [];
+    function sizeMesh() {
+      DPR = Math.min(devicePixelRatio || 1, 2);
+      W = innerWidth; H = innerHeight;
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const n = clamp(Math.round(W * H / 16000), 28, 90);
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+      }));
+    }
+    sizeMesh(); addEventListener('resize', sizeMesh);
+
+    function drawMesh() {
+      ctx.clearRect(0, 0, W, H);
+      const D = 120;
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.fillStyle = 'rgba(255,255,255,.55)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.3, 0, 6.283); ctx.fill();
+        for (let j = i + 1; j < pts.length; j++) {
+          const q = pts[j], dx = p.x - q.x, dy = p.y - q.y, d = dx * dx + dy * dy;
+          if (d < D * D) {
+            ctx.strokeStyle = `rgba(255,255,255,${(1 - Math.sqrt(d) / D) * 0.28})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+          }
+        }
+        if (mouse.on) {
+          const dx = p.x - mouse.rx, dy = p.y - mouse.ry, d = Math.hypot(dx, dy);
+          if (d < 170) {
+            ctx.strokeStyle = `rgba(255,255,255,${(1 - d / 170) * 0.8})`;
+            ctx.lineWidth = 0.9;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.rx, mouse.ry); ctx.stroke();
+          }
+        }
+      }
+    }
+
+    /* ---------- Satu loop animasi ---------- */
+    function frame() {
+      mouse.rx = lerp(mouse.rx, mouse.x, 0.18);
+      mouse.ry = lerp(mouse.ry, mouse.y, 0.18);
+      if (!touch) {
+        ring.style.transform = `translate3d(${mouse.rx - ring.offsetWidth / 2}px, ${mouse.ry - ring.offsetHeight / 2}px, 0)`;
+        dot.style.transform = `translate3d(${mouse.x - 3}px, ${mouse.y - 3}px, 0)`;
+      }
+      if (!reduce) drawMesh();
+      renderChips();
+      tickMarquee();
+      requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+  </script>
+</body>
+</html>
